@@ -1,4 +1,5 @@
-﻿using ImprovedApi.Infra.Loggers.QueryLogger;
+﻿using Flunt.Notifications;
+using ImprovedApi.Infra.Loggers.QueryLogger;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,12 +9,12 @@ using System.IO;
 
 namespace ImprovedApi.Infra.Contexts
 {
-    public abstract class BaseDbContext : DbContext
+    public abstract class ImprovedDbContext : DbContext
     {
 
         public bool IsDead { get; private set; } = false;
         protected IConfigurationRoot _configurationRoot { get; private set; }
-        public BaseDbContext(IHostingEnvironment env)
+        public ImprovedDbContext(IHostingEnvironment env)
         {
             string pathToContentRoot = Directory.GetCurrentDirectory();
             string json = Path.Combine(pathToContentRoot, "appsettings.json");
@@ -38,6 +39,16 @@ namespace ImprovedApi.Infra.Contexts
             loggerFactory.AddProvider(new TraceLoggerProvider());
             optionsBuilder.UseLoggerFactory(loggerFactory);
             optionsBuilder.EnableSensitiveDataLogging();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Ignore<Notifiable>()
+                .Ignore<Notification>();
+             
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public override void Dispose()

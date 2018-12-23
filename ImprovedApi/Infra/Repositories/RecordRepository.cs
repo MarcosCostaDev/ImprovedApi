@@ -13,7 +13,7 @@ namespace ImprovedApi.Infra.Repositories
 {
     public abstract class RecordRepository<TEntity, TDbContext> : QueryRepository<TEntity, TDbContext>, IRecordRepository<TEntity>
         where TEntity : Domain.Entities.Entity
-        where TDbContext : BaseDbContext
+        where TDbContext : ImprovedDbContext
     {
         public RecordRepository(TDbContext dbContext) : base(dbContext)
         {
@@ -74,7 +74,7 @@ namespace ImprovedApi.Infra.Repositories
 
     public abstract class RecordRepository<TEntity, TDbContext, TQueryViewModel> : RecordRepository<TEntity, TDbContext>, IRecordRepository<TEntity, TQueryViewModel>
        where TEntity : Domain.Entities.Entity
-       where TDbContext : BaseDbContext
+       where TDbContext : ImprovedDbContext
         where TQueryViewModel : QueryViewModel
     {
         public RecordRepository(TDbContext dbContext) : base(dbContext)

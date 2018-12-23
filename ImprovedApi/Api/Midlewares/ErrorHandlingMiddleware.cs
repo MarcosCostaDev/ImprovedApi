@@ -1,11 +1,13 @@
 ﻿using ImprovedApi.Api.Exceptions;
 using ImprovedApi.Api.Responses;
+using ImprovedApi.Infra.Loggers;
 using ImprovedApi.Infra.Transactions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +29,7 @@ namespace ImprovedApi.Api.Midlewares
             {
                 await next(context);
             }
-          catch (Exception ex)
+            catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex, unitOfWork);
             }
@@ -48,7 +50,14 @@ namespace ImprovedApi.Api.Midlewares
                 code = HttpStatusCode.Unauthorized;
                 result = JsonConvert.SerializeObject(new ResponseResult(null, (exception as UnauthorizedException).Notifications));
             }
-            else result = JsonConvert.SerializeObject(new { error = exception.Message });
+            else
+            {
+                result = JsonConvert.SerializeObject(new { error = exception.Message });
+
+#if DEBUG
+                Logger.Write(exception);
+#endif
+            }
 
             unitOfWork.Rollback();
 

@@ -4,6 +4,6 @@ namespace ImprovedApi.Domain.Repositories.Interfaces
 {
     public interface IRepository
     {
-        BaseDbContext GetContext();
+        ImprovedDbContext GetContext();
     }
 }
