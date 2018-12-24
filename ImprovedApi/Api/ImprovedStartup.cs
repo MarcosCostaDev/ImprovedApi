@@ -121,7 +121,7 @@ namespace ImprovedApi.Api
                 }
                 catch (Exception ex)
                 {
-                    ImprovedLogger.Write($@"Please add {Assembly.GetExecutingAssembly().GetName().Name}.xml in your project. \n
+                    ImprovedLogger.Write($@"Please add {Path.Combine(AppContext.BaseDirectory, Assembly.GetExecutingAssembly().GetName().Name)}.xml in your project. \n
                         Go to properties -> build -> select checkbox 'XML documentation file' ");
 
                 }
