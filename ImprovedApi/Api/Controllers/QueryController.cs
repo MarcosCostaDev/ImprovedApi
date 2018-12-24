@@ -19,8 +19,8 @@ namespace ImprovedApi.Api.Controllers
             _repository = repository;
         }
 
-        [HttpGet("v1/{id:long}")]
-        public virtual OkObjectResult GetById([FromRoute] long id)
+        [HttpGet("v1/{id}")]
+        public virtual OkObjectResult GetById([FromRoute] int id)
         {
             return Ok(_repository.GetById(id));
         }
@@ -34,23 +34,6 @@ namespace ImprovedApi.Api.Controllers
     }
 
     
-
-    public abstract class QueryController<TEntity, TRepository, TQueryViewModel> : QueryController<TEntity, TRepository>
-        where TEntity : Entity
-        where TRepository : IQueryRepository<TEntity, TQueryViewModel>
-        where TQueryViewModel : QueryViewModel
-    {
-        public QueryController(IMediator mediator, IUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
-        {
-        }
-
-        [HttpGet, Route("v1/list/viewmodel")]
-        public virtual OkObjectResult ListViewModel()
-        {
-            return Ok(_repository.ListViewModel());
-        }
-    }
-
 
 
 }
