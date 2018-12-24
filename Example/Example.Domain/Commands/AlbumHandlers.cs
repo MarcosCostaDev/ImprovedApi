@@ -19,6 +19,15 @@ namespace Example.Domain.Commands
             public int ArtistId { get; set; }
 
             public string Title { get; set; }
+
+        }
+
+        public class UpdateCommand : IRequest<ResponseResult>
+        {
+            public int AlbumId { get; set; }
+
+            public string Title { get; set; }
+            public int ArtistId { get; set; }
         }
 
         public class DeleteCommand : IRequest<ResponseResult>
@@ -34,6 +43,7 @@ namespace Example.Domain.Commands
         public sealed class Handlers : ImprovedHandler<IAlbumRepository>,
             IRequestHandler<CreateCommand, ResponseResult>,
             IRequestHandler<DeleteCommand, ResponseResult>,
+            IRequestHandler<UpdateCommand, ResponseResult>,
             IRequestHandler<DeleteManyCommand, ResponseResult>
 
         {
@@ -62,6 +72,15 @@ namespace Example.Domain.Commands
                 _repository.IncludeInTrasation(_unitOfWork);
                 _repository.BulkDelete(request.Albums);
                 return new ResponseResult(null, this);
+            }
+
+            public async Task<ResponseResult> Handle(UpdateCommand request, CancellationToken cancellationToken)
+            {
+                _repository.IncludeInTrasation(_unitOfWork);
+                var album = _repository.GetById(request.AlbumId);
+                album.Update(request.Title, request.ArtistId);
+                AddNotifications(album);
+                return new ResponseResult(album, this);
             }
         }
     }

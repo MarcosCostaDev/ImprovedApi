@@ -15,12 +15,11 @@ namespace Example.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArtistController : ImprovedRecordController<Artist, IArtistRepository, ArtistHandlers.CreateCommand>
+    public class ArtistController : ImprovedRecordController<Artist, IArtistRepository, ArtistHandlers.CreateCommand, ArtistHandlers.UpdateCommand, ArtistHandlers.DeleteCommand>
     {
         public ArtistController(IMediator mediator, IImprovedUnitOfWork unitOfWork, IArtistRepository repository) : base(mediator, unitOfWork, repository)
         {
         }
-
 
     }
 }

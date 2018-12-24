@@ -15,7 +15,7 @@ namespace Example.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AlbumController : ImprovedRecordController<Album, IAlbumRepository, AlbumHandlers.CreateCommand>
+    public class AlbumController : ImprovedRecordController<Album, IAlbumRepository, AlbumHandlers.CreateCommand, AlbumHandlers.UpdateCommand, AlbumHandlers.DeleteCommand>
     {
         public AlbumController(IMediator mediator, IImprovedUnitOfWork unitOfWork, IAlbumRepository repository) : base(mediator, unitOfWork, repository)
         {

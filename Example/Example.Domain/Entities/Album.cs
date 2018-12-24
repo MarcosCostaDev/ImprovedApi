@@ -10,6 +10,10 @@ namespace Example.Domain.Entities
     {
         public Album(string title, int artistId)
         {
+            Update(title, artistId);
+        }
+        public void Update(string title, int artistId)
+        {
             var contract = new Contract();
             contract.IsNotNullOrEmpty(title, "Title", "Title must be informed!");
             contract.IsLowerOrEqualsThan(artistId, 0, "ArtistId", "ArtistId must be informed!");
