@@ -20,6 +20,18 @@ namespace Example.Domain.Commands
             public string Name { get; set; }
         }
 
+        public class UpdateCommand : IRequest<ResponseResult>
+        {
+            public string ArtistId { get; set; }
+            public string Name { get; set; }
+        }
+
+        public class DeleteCommand : IRequest<ResponseResult>
+        {
+            public int ArtistId { get; set; }
+        }
+
+
         public class AuthCommand : IRequest<ResponseResult>
         {
             public string Name { get; set; }
@@ -27,10 +39,14 @@ namespace Example.Domain.Commands
 
         public sealed class Handlers : ImprovedHandler<IArtistRepository>,
            IRequestHandler<CreateCommand, ResponseResult>,
+            IRequestHandler<UpdateCommand, ResponseResult>,
+             IRequestHandler<DeleteCommand, ResponseResult>,
             IRequestHandler<AuthCommand, ResponseResult>
         {
-            public Handlers(IImprovedUnitOfWork unitOfWork, IMediator mediator, IArtistRepository repository) : base(unitOfWork, mediator, repository)
+            readonly IAlbumRepository _albumRepository;
+            public Handlers(IImprovedUnitOfWork unitOfWork, IMediator mediator, IArtistRepository repository, IAlbumRepository albumRepository) : base(unitOfWork, mediator, repository)
             {
+                _albumRepository = albumRepository;
             }
 
             public async Task<ResponseResult> Handle(CreateCommand request, CancellationToken cancellationToken)
@@ -48,6 +64,26 @@ namespace Example.Domain.Commands
                 contract.IsNotNull(artist, "user", "user not authenticated");
                 AddNotifications(contract);
                 return new ResponseResult(artist, this);
+            }
+
+            public async Task<ResponseResult> Handle(UpdateCommand request, CancellationToken cancellationToken)
+            {
+                _repository.IncludeInTrasation(_unitOfWork);
+                var artist = _repository.GetById(request.ArtistId);
+                artist.Update(request.Name);
+                _repository.Edit(artist);
+                AddNotifications(artist);
+                return new ResponseResult(artist, this);
+            }
+
+            public async Task<ResponseResult> Handle(DeleteCommand request, CancellationToken cancellationToken)
+            {
+                _repository.IncludeInTrasation(_unitOfWork);
+                var albums = _albumRepository.GetAlbumsByArtist(request.ArtistId);
+                var resultDelete = await _mediator.Send(new AlbumHandlers.DeleteManyCommand { Albums = albums });
+                AddNotifications(resultDelete);
+                _repository.Delete(request.ArtistId);
+                return new ResponseResult(null, this);
             }
         }
     }

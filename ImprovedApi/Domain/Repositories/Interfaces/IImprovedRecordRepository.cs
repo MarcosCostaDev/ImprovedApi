@@ -1,4 +1,5 @@
 ﻿using ImprovedApi.Domain.ViewModels;
+using System.Collections.Generic;
 
 namespace ImprovedApi.Domain.Repositories.Interfaces
 {
@@ -12,7 +13,8 @@ namespace ImprovedApi.Domain.Repositories.Interfaces
         void Delete(string id);
         void Delete(int id);
         void Delete(short id);
-
+        void BulkDelete(IEnumerable<TEntity> entities);
+        void BulkInsert(IEnumerable<TEntity> entities);
     }
 
     public interface IImprovedRecordRepository<TEntity, TQueryViewModel> : IImprovedRecordRepository<TEntity>, IImprovedQueryRepository<TEntity, TQueryViewModel>

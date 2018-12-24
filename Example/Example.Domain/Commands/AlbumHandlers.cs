@@ -21,8 +21,21 @@ namespace Example.Domain.Commands
             public string Title { get; set; }
         }
 
+        public class DeleteCommand : IRequest<ResponseResult>
+        {
+            public int AlbumId { get; set; }
+        }
+
+        public class DeleteManyCommand : IRequest<ResponseResult>
+        {
+            public IEnumerable<Album> Albums { get; set; }
+        }
+
         public sealed class Handlers : ImprovedHandler<IAlbumRepository>,
-            IRequestHandler<CreateCommand, ResponseResult>
+            IRequestHandler<CreateCommand, ResponseResult>,
+            IRequestHandler<DeleteCommand, ResponseResult>,
+            IRequestHandler<DeleteManyCommand, ResponseResult>
+
         {
             public Handlers(IImprovedUnitOfWork unitOfWork, IMediator mediator, IAlbumRepository repository) : base(unitOfWork, mediator, repository)
             {
@@ -35,6 +48,20 @@ namespace Example.Domain.Commands
                 AddNotifications(album);
                 _repository.Add(album);
                 return new ResponseResult(album, this);
+            }
+
+            public async Task<ResponseResult> Handle(DeleteCommand request, CancellationToken cancellationToken)
+            {
+                _repository.IncludeInTrasation(_unitOfWork);
+                _repository.Delete(request.AlbumId);
+                return new ResponseResult(null, this);
+            }
+
+            public async Task<ResponseResult> Handle(DeleteManyCommand request, CancellationToken cancellationToken)
+            {
+                _repository.IncludeInTrasation(_unitOfWork);
+                _repository.BulkDelete(request.Albums);
+                return new ResponseResult(null, this);
             }
         }
     }

@@ -70,6 +70,18 @@ namespace ImprovedApi.Infra.Repositories
             _dbContext.Set<TEntity>().Remove(entity);
             SetEntityState(entity, EntityState.Deleted);
         }
+
+        public virtual void BulkDelete(IEnumerable<TEntity> entities)
+        {
+            entities = entities.Select(p => { SetEntityState(p, EntityState.Deleted); return p; });
+            _dbContext.Set<TEntity>().RemoveRange(entities);
+        }
+
+        public virtual void BulkInsert(IEnumerable<TEntity> entities)
+        {
+            entities = entities.Select(p => { SetEntityState(p, EntityState.Added); return p; });
+            _dbContext.Set<TEntity>().AddRange(entities);
+        }
     }
 
     public abstract class ImprovedRecordRepository<TEntity, TDbContext, TQueryViewModel> : ImprovedRecordRepository<TEntity, TDbContext>, IImprovedRecordRepository<TEntity, TQueryViewModel>

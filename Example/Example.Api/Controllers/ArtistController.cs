@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Example.Domain.Commands;
 using Example.Domain.Entities;
 using Example.Domain.Repository;
 using ImprovedApi.Api.Controllers;
@@ -14,10 +15,12 @@ namespace Example.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ArtistController : ImprovedQueryController<Artist, IArtistRepository>
+    public class ArtistController : ImprovedRecordController<Artist, IArtistRepository, ArtistHandlers.CreateCommand>
     {
         public ArtistController(IMediator mediator, IImprovedUnitOfWork unitOfWork, IArtistRepository repository) : base(mediator, unitOfWork, repository)
         {
         }
+
+
     }
 }

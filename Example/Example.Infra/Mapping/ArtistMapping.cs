@@ -13,6 +13,7 @@ namespace Example.Infra.Mapping
         {
             builder.HasKey(p => p.ArtistId);
             builder.Property(p => p.Name).HasMaxLength(120);
+
         }
     }
 }
