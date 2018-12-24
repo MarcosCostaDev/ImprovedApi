@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ImprovedApi\ImprovedApi.csproj" />
+    <ProjectReference Include="..\..\ImprovedApi\ImprovedApi.csproj" />
+    <ProjectReference Include="..\Example.Domain\Example.Domain.csproj" />
   </ItemGroup>
 
 </Project>

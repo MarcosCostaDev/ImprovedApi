@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ImprovedApi.Api.Midlewares;
+using ImprovedApi.Api.Security.Token;
 using ImprovedApi.Infra.Loggers;
 using ImprovedApi.Infra.Transactions;
 using MediatR;
@@ -24,16 +25,30 @@ namespace ImprovedApi.Api
         {
             Configuration = configuration;
         }
-        public IList<string> AssembliesMidiatR { get; private set; } = new List<string>();
+        public IList<string> AssembliesMidiatR { get; protected set; } = new List<string>();
         protected readonly IConfiguration Configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
 
+            if(Configuration.GetSection("TokenConfiguration") != null)
+            {
+                services.AddOptions();
+                services.Configure<TokenConfiguration>(options => Configuration.GetSection("TokenConfiguration").Bind(options));
+                services.AddSingleton<SigningConfigurations, SigningConfigurations>();
+            }
+            else
+            {
+                ImprovedLogger.Write(@"if you wish use token/authentication, please add 'TokenConfiguration' Section in your appsettings.json with properties as follows:
+                                      'SecretKey', 'Audience', 'Issuer', 'Seconds'");
+            }
+           
 
-            services.AddSingleton<IUnitOfWork, UnitOfWork>()
+
+            services.AddSingleton<IImprovedUnitOfWork, ImprovedUnitOfWork>()
                 .AddSingleton(Configuration);
+
 
             AddMediatR(services);
             AddAutoMapper(services);
@@ -53,6 +68,8 @@ namespace ImprovedApi.Api
 #endif
 
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+            
+            app.UseMvc();
         }
 
 
@@ -60,7 +77,16 @@ namespace ImprovedApi.Api
         #region MediatR
         public virtual void AddMediatR(IServiceCollection services)
         {
-            services.AddMediatR(AssembliesMidiatR.Select(p => AppDomain.CurrentDomain.Load(p)));
+            if(AssembliesMidiatR.Any())
+            {
+                services.AddMediatR(AssembliesMidiatR.Select(p => AppDomain.CurrentDomain.Load(p)));
+            }
+            else
+            {
+                ImprovedLogger.Write("Please, inform the 'AssembliesMidiatR' inside contructor Startup class!");
+            }
+
+           
         }
         #endregion
 
@@ -95,7 +121,7 @@ namespace ImprovedApi.Api
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write($@"Please add {Assembly.GetExecutingAssembly().GetName().Name}.xml in your project. \n
+                    ImprovedLogger.Write($@"Please add {Assembly.GetExecutingAssembly().GetName().Name}.xml in your project. \n
                         Go to properties -> build -> select checkbox 'XML documentation file' ");
 
                 }

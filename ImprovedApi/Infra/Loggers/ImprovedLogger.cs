@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ImprovedApi.Infra.Loggers
 {
-    public static class Logger
+    public static class ImprovedLogger
     {
         public static void Write(string error, string title = "ERROR")
         {

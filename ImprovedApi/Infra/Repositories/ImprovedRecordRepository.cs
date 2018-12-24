@@ -11,11 +11,11 @@ using System.Linq;
 
 namespace ImprovedApi.Infra.Repositories
 {
-    public abstract class RecordRepository<TEntity, TDbContext> : QueryRepository<TEntity, TDbContext>, IRecordRepository<TEntity>
-        where TEntity : Domain.Entities.Entity
+    public abstract class ImprovedRecordRepository<TEntity, TDbContext> : ImprovedQueryRepository<TEntity, TDbContext>, IImprovedRecordRepository<TEntity>
+        where TEntity : Domain.Entities.ImprovedEntity
         where TDbContext : ImprovedDbContext
     {
-        public RecordRepository(TDbContext dbContext) : base(dbContext)
+        public ImprovedRecordRepository(TDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -72,12 +72,12 @@ namespace ImprovedApi.Infra.Repositories
         }
     }
 
-    public abstract class RecordRepository<TEntity, TDbContext, TQueryViewModel> : RecordRepository<TEntity, TDbContext>, IRecordRepository<TEntity, TQueryViewModel>
-       where TEntity : Domain.Entities.Entity
+    public abstract class ImprovedRecordRepository<TEntity, TDbContext, TQueryViewModel> : ImprovedRecordRepository<TEntity, TDbContext>, IImprovedRecordRepository<TEntity, TQueryViewModel>
+       where TEntity : Domain.Entities.ImprovedEntity
        where TDbContext : ImprovedDbContext
-        where TQueryViewModel : QueryViewModel
+        where TQueryViewModel : ImprovedQueryViewModel
     {
-        public RecordRepository(TDbContext dbContext) : base(dbContext)
+        public ImprovedRecordRepository(TDbContext dbContext) : base(dbContext)
         {
         }
 

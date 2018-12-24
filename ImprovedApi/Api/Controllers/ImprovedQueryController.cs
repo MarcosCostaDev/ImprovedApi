@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace ImprovedApi.Api.Controllers
 {
 
-    public abstract class QueryController<TEntity, TRepository> : BaseController
-        where TEntity : Entity
-        where TRepository : IQueryRepository<TEntity>
+    public abstract class ImprovedQueryController<TEntity, TRepository> : ImprovedBaseController
+        where TEntity : ImprovedEntity
+        where TRepository : IImprovedQueryRepository<TEntity>
 
     {
         protected readonly TRepository _repository;
-        public QueryController(IMediator mediator, IUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork)
+        public ImprovedQueryController(IMediator mediator, IImprovedUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork)
         {
             _repository = repository;
         }
@@ -31,6 +31,11 @@ namespace ImprovedApi.Api.Controllers
             return Ok(_repository.List());
         }
 
+        [HttpGet, Route("v1/list/{page:int:min(1)}/{pageSize:int}")]
+        public virtual OkObjectResult List([FromRoute]int page, [FromRoute]int pageSize)
+        {
+            return Ok(_repository.ListPaged(page, pageSize));
+        }
     }
 
     

@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ImprovedApi\ImprovedApi.csproj" />
+    <Folder Include="AutoMapper\" />
+    <Folder Include="Entities\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AutoMapper\" />
-    <Folder Include="Commands\" />
+    <ProjectReference Include="..\..\ImprovedApi\ImprovedApi.csproj" />
   </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@ namespace ImprovedApi.Api.Midlewares
             this.next = next;
         }
 
-        public async Task Invoke(HttpContext context, [FromServices] IUnitOfWork unitOfWork)
+        public async Task Invoke(HttpContext context, [FromServices] IImprovedUnitOfWork unitOfWork)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace ImprovedApi.Api.Midlewares
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception, IUnitOfWork unitOfWork)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception, IImprovedUnitOfWork unitOfWork)
         {
             var code = HttpStatusCode.InternalServerError; // 500 if unexpected
             var result = string.Empty;
@@ -55,7 +55,7 @@ namespace ImprovedApi.Api.Midlewares
                 result = JsonConvert.SerializeObject(new { error = exception.Message });
 
 #if DEBUG
-                Logger.Write(exception);
+                ImprovedLogger.Write(exception);
 #endif
             }
 

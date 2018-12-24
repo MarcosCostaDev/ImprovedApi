@@ -2,7 +2,7 @@
 
 namespace ImprovedApi.Domain.Entities
 {
-    public abstract class Entity : Notifiable
+    public abstract class ImprovedEntity : Notifiable
     {
     }
 }

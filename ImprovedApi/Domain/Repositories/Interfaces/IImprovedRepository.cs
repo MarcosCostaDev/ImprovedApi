@@ -2,7 +2,7 @@
 
 namespace ImprovedApi.Domain.Repositories.Interfaces
 {
-    public interface IRepository
+    public interface IImprovedRepository
     {
         ImprovedDbContext GetContext();
     }

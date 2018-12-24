@@ -11,7 +11,9 @@ namespace Example.Infra.Context
 {
     public class ExampleContext : ImprovedDbContext
     {
-        public DbSet<Category> Category { get; set; }
+        public DbSet<Album> Album { get; set; }
+        public DbSet<Artist> Artist { get; set; }
+
         public ExampleContext(IHostingEnvironment env) : base(env)
         {
         }
@@ -25,7 +27,8 @@ namespace Example.Infra.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .ApplyConfiguration(new CategoryMapping());
+                .ApplyConfiguration(new AlbumMapping())
+                .ApplyConfiguration(new ArtistMapping());
 
             base.OnModelCreating(modelBuilder);
         }

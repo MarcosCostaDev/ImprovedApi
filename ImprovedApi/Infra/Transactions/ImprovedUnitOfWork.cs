@@ -9,13 +9,13 @@ using System.Text;
 
 namespace ImprovedApi.Infra.Transactions
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class ImprovedUnitOfWork : IImprovedUnitOfWork, IDisposable
     {
         public bool IsDeal { get; private set; } = false;
         private IList<ImprovedDbContext> contexts = new List<ImprovedDbContext>();
         private Dictionary<string, IDbContextTransaction> dbContextTransations = new Dictionary<string, IDbContextTransaction>();
 
-        public void Begin(IRepository repository)
+        public void Begin(IImprovedRepository repository)
         {
             Begin(repository.GetContext());
         }
@@ -91,19 +91,19 @@ namespace ImprovedApi.Infra.Transactions
     }
 
 
-    public static class UnitOfWorkExtension
+    public static class ImprovedUnitOfWorkExtension
     {
-        public static void IncludeInTrasation(this IRepository repository, IUnitOfWork unitOfWork)
+        public static void IncludeInTrasation(this IImprovedRepository repository, IImprovedUnitOfWork unitOfWork)
         {
             unitOfWork.Begin(repository);
         }
 
     }
 
-    public interface IUnitOfWork
+    public interface IImprovedUnitOfWork
     {
         void Begin(ImprovedDbContext baseDbContext);
-        void Begin(IRepository repository);
+        void Begin(IImprovedRepository repository);
         void Commit();
         void Rollback();
     }

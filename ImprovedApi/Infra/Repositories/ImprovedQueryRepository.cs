@@ -2,19 +2,20 @@
 using ImprovedApi.Domain.Repositories.Interfaces;
 using ImprovedApi.Domain.ViewModels;
 using ImprovedApi.Infra.Contexts;
+using ImprovedApi.Infra.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ImprovedApi.Infra.Repositories
 {
-    public abstract class QueryRepository<TEntity, TDbContext> : IQueryRepository<TEntity>
-        where TEntity : Domain.Entities.Entity
+    public abstract class ImprovedQueryRepository<TEntity, TDbContext> : IImprovedQueryRepository<TEntity>
+        where TEntity : Domain.Entities.ImprovedEntity
         where TDbContext : ImprovedDbContext
     {
 
         protected readonly TDbContext _dbContext;
-        public QueryRepository(TDbContext dbContext)
+        public ImprovedQueryRepository(TDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -49,6 +50,10 @@ namespace ImprovedApi.Infra.Repositories
             return _dbContext.Set<TEntity>().AsNoTracking().ToList();
         }
 
+        public IEnumerable<TEntity> ListPaged(int page, int pageSize)
+        {
+            return _dbContext.Set<TEntity>().AsQueryable().GetPaged(page, pageSize).Results;
+        }
 
         public virtual IEnumerable<TEntity> ListTracked()
         {
@@ -57,15 +62,15 @@ namespace ImprovedApi.Infra.Repositories
 
     }
 
-    public abstract class QueryRepository<TEntity, TDbContext, TViewModel> : QueryRepository<TEntity, TDbContext>, IQueryRepository<TEntity, TViewModel>
-        where TEntity : Domain.Entities.Entity
-        where TViewModel : QueryViewModel
+    public abstract class ImprovedQueryRepository<TEntity, TDbContext, TViewModel> : ImprovedQueryRepository<TEntity, TDbContext>, IImprovedQueryRepository<TEntity, TViewModel>
+        where TEntity : Domain.Entities.ImprovedEntity
+        where TViewModel : ImprovedQueryViewModel
         where TDbContext : ImprovedDbContext
     {
-        public QueryRepository(TDbContext dbContext) : base(dbContext)
+        public ImprovedQueryRepository(TDbContext dbContext) : base(dbContext)
         {
         }
-        IEnumerable<TViewModel> IQueryRepository<TEntity, TViewModel>.ListViewModel()
+        IEnumerable<TViewModel> IImprovedQueryRepository<TEntity, TViewModel>.ListViewModel()
         {
             return _dbContext.Set<TEntity>().AsNoTracking().ProjectTo<TViewModel>().ToList();
         }

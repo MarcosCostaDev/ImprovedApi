@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ImprovedApi.Domain.ViewModels
 {
-    public abstract class ViewModel
+    public abstract class ImprovedViewModel
     {
     }
 }

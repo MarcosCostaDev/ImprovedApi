@@ -6,9 +6,9 @@ using System.Text;
 
 namespace ImprovedApi.Api.Exceptions
 {
-    public class EntityException : BaseException<Entity>
+    public class EntityException : BaseException<ImprovedEntity>
     {
-        public EntityException(Entity entity) : base(entity)
+        public EntityException(ImprovedEntity entity) : base(entity)
         {
         }
 

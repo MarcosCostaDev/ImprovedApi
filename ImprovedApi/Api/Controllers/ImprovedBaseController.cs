@@ -13,12 +13,12 @@ using System.Text;
 
 namespace ImprovedApi.Api.Controllers
 {
-    public abstract class BaseController : Controller
+    public abstract class ImprovedBaseController : Controller
     {
-        protected IUnitOfWork _unitOfWork;
+        protected IImprovedUnitOfWork _unitOfWork;
         protected IMediator _mediator;
       
-        public BaseController(IMediator mediator, IUnitOfWork unitOfWork)
+        public ImprovedBaseController(IMediator mediator, IImprovedUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _mediator = mediator;
@@ -28,9 +28,9 @@ namespace ImprovedApi.Api.Controllers
         public override OkObjectResult Ok(object value)
         {
 
-            if (value is Entity)
+            if (value is ImprovedEntity)
             {
-                var convert = value as Entity;
+                var convert = value as ImprovedEntity;
                 if (convert.Invalid) throw new EntityException(convert);
             }
             else if(value is Notifiable)
@@ -68,5 +68,6 @@ namespace ImprovedApi.Api.Controllers
 
             return base.Ok(result);
         }
+
     }
 }

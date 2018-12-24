@@ -13,12 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace ImprovedApi.Api.Controllers
 {
 
-    public abstract class RecordController<TEntity, TRepository, TCreateCommand> : QueryController<TEntity, TRepository>
-        where TEntity : Entity
-        where TRepository : IRecordRepository<TEntity>
+    public abstract class ImprovedRecordController<TEntity, TRepository, TCreateCommand> : ImprovedQueryController<TEntity, TRepository>
+        where TEntity : ImprovedEntity
+        where TRepository : IImprovedRecordRepository<TEntity>
         where TCreateCommand : IRequest<ResponseResult>
     {
-        public RecordController(IMediator mediator, IUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
+        public ImprovedRecordController(IMediator mediator, IImprovedUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
         {
         }
 
@@ -29,13 +29,13 @@ namespace ImprovedApi.Api.Controllers
         }
     }
 
-    public abstract class RecordController<TEntity, TRepository, TCreateCommand, TUpdateCommand> : RecordController<TEntity, TRepository, TCreateCommand>
-        where TEntity : Entity
-        where TRepository : IRecordRepository<TEntity>
+    public abstract class ImprovedRecordController<TEntity, TRepository, TCreateCommand, TUpdateCommand> : ImprovedRecordController<TEntity, TRepository, TCreateCommand>
+        where TEntity : ImprovedEntity
+        where TRepository : IImprovedRecordRepository<TEntity>
         where TCreateCommand : IRequest<ResponseResult>
         where TUpdateCommand : IRequest<ResponseResult>
     {
-        public RecordController(IMediator mediator, IUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
+        public ImprovedRecordController(IMediator mediator, IImprovedUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
         {
         }
 
@@ -46,14 +46,14 @@ namespace ImprovedApi.Api.Controllers
         }
     }
 
-    public abstract class RecordController<TEntity, TRepository, TCreateCommand, TUpdateCommand, TDeleteCommand> : RecordController<TEntity, TRepository, TCreateCommand, TUpdateCommand>
-        where TEntity : Entity
-        where TRepository : IRecordRepository<TEntity>
+    public abstract class ImprovedRecordController<TEntity, TRepository, TCreateCommand, TUpdateCommand, TDeleteCommand> : ImprovedRecordController<TEntity, TRepository, TCreateCommand, TUpdateCommand>
+        where TEntity : ImprovedEntity
+        where TRepository : IImprovedRecordRepository<TEntity>
         where TCreateCommand : IRequest<ResponseResult>
         where TUpdateCommand : IRequest<ResponseResult>
         where TDeleteCommand : IRequest<ResponseResult>
     {
-        public RecordController(IMediator mediator, IUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
+        public ImprovedRecordController(IMediator mediator, IImprovedUnitOfWork unitOfWork, TRepository repository) : base(mediator, unitOfWork, repository)
         {
         }
 

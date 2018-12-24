@@ -20,6 +20,7 @@ namespace Example.Api
     {
         public Startup(IConfiguration configuration) : base(configuration)
         {
+            base.AssembliesMidiatR.Add("Example.Domain");
         }
 
 
@@ -31,7 +32,8 @@ namespace Example.Api
 
             services
                 .AddScoped<ExampleContext, ExampleContext>()
-                .AddTransient<ICategoryRepository, CategoryRepository>();
+                .AddTransient<IAlbumRepository, AlbumRepository>()
+                .AddTransient<IArtistRepository, ArtistRepository>();
 
             base.ConfigureServices(services);
         }
@@ -44,9 +46,9 @@ namespace Example.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
 
             base.Configure(app, env);
+
 
 
 
