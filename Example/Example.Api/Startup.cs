@@ -18,7 +18,7 @@ namespace Example.Api
 {
     public class Startup : ImprovedStartup
     {
-        public Startup(IConfiguration configuration) : base(configuration)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger, ILoggerFactory logFactory, IHostingEnvironment hostingEnvironment) : base(configuration, logger, logFactory, hostingEnvironment)
         {
             AssembliesMidiatR.Add("Example.Domain");
 

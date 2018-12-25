@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,15 +22,23 @@ namespace ImprovedApi.Api
 {
     public abstract class ImprovedStartup
     {
-        public ImprovedStartup(IConfiguration configuration)
+
+        protected bool SwaggerEnabled { get; set; } = true;
+        protected readonly IConfiguration Configuration;
+        protected List<string> AssembliesMidiatR { get; private set; } = new List<string>();
+        protected List<Profile> AutoMapperProfiles { get; private set; } = new List<Profile>();
+        protected readonly IHostingEnvironment HostingEnvironment;
+        protected readonly ILogger<ImprovedStartup> Logger;
+
+        public ImprovedStartup(IConfiguration configuration, ILogger<ImprovedStartup> logger, ILoggerFactory logFactory, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out, "ImprovedApi Log"));
+            Logger = logger;
+            HostingEnvironment = hostingEnvironment;
+            ApplicationLogging.LoggerFactory = logFactory;
         }
-        public List<string> AssembliesMidiatR { get; protected set; } = new List<string>();
-        public List<Profile> AutoMapperProfiles { get; protected set; } = new List<Profile>();
-
-        protected bool SwaggerEnabled { get; set; } = true; 
-        protected readonly IConfiguration Configuration;
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
