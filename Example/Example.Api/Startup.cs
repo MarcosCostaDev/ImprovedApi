@@ -20,7 +20,11 @@ namespace Example.Api
     {
         public Startup(IConfiguration configuration) : base(configuration)
         {
-            base.AssembliesMidiatR.Add("Example.Domain");
+            AssembliesMidiatR.Add("Example.Domain");
+
+#if !DEBUG
+            SwaggerEnabled = false;
+#endif
         }
 
 

@@ -25,7 +25,10 @@ namespace ImprovedApi.Api
         {
             Configuration = configuration;
         }
-        public IList<string> AssembliesMidiatR { get; protected set; } = new List<string>();
+        public List<string> AssembliesMidiatR { get; protected set; } = new List<string>();
+        public List<Profile> AutoMapperProfiles { get; protected set; } = new List<Profile>();
+
+        protected bool SwaggerEnabled { get; set; } = true; 
         protected readonly IConfiguration Configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -53,9 +56,11 @@ namespace ImprovedApi.Api
             AddMediatR(services);
             AddAutoMapper(services);
 
-#if DEBUG
-            AddSwagger(services);
-#endif
+            if(SwaggerEnabled)
+            {
+                AddSwagger(services);
+            }
+           
         }
 
 
@@ -63,10 +68,11 @@ namespace ImprovedApi.Api
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 
-#if DEBUG
-            UseSwagger(app);
-#endif
-
+            if (SwaggerEnabled)
+            {
+                UseSwagger(app);
+            }
+                
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             
             app.UseMvc();
@@ -93,7 +99,14 @@ namespace ImprovedApi.Api
         #region AutoMapper
         public virtual void AddAutoMapper(IServiceCollection services)
         {
-
+            if(AutoMapperProfiles.Any())
+            {
+                Mapper.Initialize(cfg =>
+                {
+                    AutoMapperProfiles.ForEach(p => cfg.AddProfile(p));                   
+                });
+            }
+           
         }
         #endregion
 
