@@ -28,7 +28,7 @@ namespace ImprovedApi.Infra.Contexts
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(pathToContentRoot)
                 .AddJsonFile($"appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json");
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
 
             _configurationRoot = configurationBuilder.Build();
         }
