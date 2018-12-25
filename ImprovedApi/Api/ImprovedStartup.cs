@@ -6,6 +6,8 @@ using ImprovedApi.Infra.Transactions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,9 +44,9 @@ namespace ImprovedApi.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
-        {
+        { 
 
-            if(Configuration.GetSection("TokenConfiguration") != null)
+            if (Configuration.GetSection("TokenConfiguration") != null)
             {
                 services.AddOptions();
                 services.Configure<TokenConfiguration>(options => Configuration.GetSection("TokenConfiguration").Bind(options));
@@ -74,9 +76,8 @@ namespace ImprovedApi.Api
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public virtual void Configure(IApplicationBuilder app)
         {
-
             if (SwaggerEnabled)
             {
                 UseSwagger(app);
@@ -86,11 +87,9 @@ namespace ImprovedApi.Api
             
             app.UseMvc();
         }
-
-
-
+               
         #region MediatR
-        public virtual void AddMediatR(IServiceCollection services)
+        protected virtual void AddMediatR(IServiceCollection services)
         {
             if(AssembliesMidiatR.Any())
             {
@@ -106,7 +105,7 @@ namespace ImprovedApi.Api
         #endregion
 
         #region AutoMapper
-        public virtual void AddAutoMapper(IServiceCollection services)
+        protected virtual void AddAutoMapper(IServiceCollection services)
         {
             if(AutoMapperProfiles.Any())
             {
@@ -118,10 +117,9 @@ namespace ImprovedApi.Api
            
         }
         #endregion
-
-
+        
         #region Swagger
-        public virtual void AddSwagger(IServiceCollection services)
+        protected virtual void AddSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
@@ -163,5 +161,16 @@ namespace ImprovedApi.Api
 
         #endregion
 
+        #region Cookies
+        protected virtual void AddCookiePolicy(IServiceCollection services)
+        {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+        }
+        #endregion
     }
 }

@@ -31,8 +31,16 @@ namespace Example.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc()
+              .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+              .AddJsonOptions(options =>
+              {
+                  options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                  options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+              });
+
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
 
             services
                 .AddScoped<ExampleContext, ExampleContext>()
@@ -43,19 +51,15 @@ namespace Example.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public override void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public override void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
 
-            base.Configure(app, env);
-
-
-
-
+            base.Configure(app);
         }
     }
 }
