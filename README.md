@@ -1,12 +1,13 @@
 # ImprovedApi
 Base api to use in projects. Its include Dotnet Core 2.1, Mediator, Automapper, Flunt.
 
+# This package is available through Nuget Packages: https://www.nuget.org/packages/ImprovedApi
 ## To Install this Nuget package
 ### Nuget Package Manager
-`PM > Install-Package ImprovedApi -Version 2.0.2`
+`PM > Install-Package ImprovedApi`
 ### .NET Cli
-`> dotnet add package ImprovedApi --version 2.0.2`
+`> dotnet add package ImprovedApi`
 ### Paket CLI
-`> paket add ImprovedApi --version 2.0.2`
+`> paket add ImprovedApi`
 
 Install this package in all projects of your solution.
