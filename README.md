@@ -1,8 +1,18 @@
 # ImprovedApi
-Base api to use in projects. Its include Dotnet Core 2.1, Mediator, Automapper, Flunt.
+ImprovedApi is the best way to create a complex and security API. It has many modern patterns that you will need to build any api,
+you will work with follows:
+- CQRS
+- DDD
+- Fluent Validation
+- Events
 
-# This package is available through Nuget Packages: https://www.nuget.org/packages/ImprovedApi
-## To Install this Nuget package
+
+
+This package is available through Nuget Packages: https://www.nuget.org/packages/ImprovedApi
+
+## Dependency
+- dotnetcore 2.1
+
 ### Nuget Package Manager
 `PM > Install-Package ImprovedApi`
 ### .NET Cli
