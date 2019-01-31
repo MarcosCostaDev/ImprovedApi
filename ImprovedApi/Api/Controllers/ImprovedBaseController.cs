@@ -44,7 +44,10 @@ namespace ImprovedApi.Api.Controllers
             var result = new ResponseResult(value);
 
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Result: ${JsonConvert.SerializeObject(result)}", "Information");
+            System.Diagnostics.Debug.WriteLine($@"Result: ${JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            })}", "Information");
 #endif
 
             return base.Ok(result);
@@ -63,7 +66,10 @@ namespace ImprovedApi.Api.Controllers
             var result = new ResponseResult(value, notifications);
 
 #if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Result: ${JsonConvert.SerializeObject(result)}", "Information");
+            System.Diagnostics.Debug.WriteLine($@"Result: ${JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            })}", "Information");
 #endif
 
             return base.Ok(result);

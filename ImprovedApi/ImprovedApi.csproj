@@ -6,8 +6,8 @@
     <Description>Improved api to start any api project.</Description>
     <PackageId>ImprovedApi</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageReleaseNotes>update project to dotnet core 2.2.0</PackageReleaseNotes>
-    <Version>2.2.0</Version>
+    <PackageReleaseNotes>fixing json looping reference</PackageReleaseNotes>
+    <Version>2.2.2</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>ImprovedApi</Company>
     <Authors>ImprovedApi</Authors>
