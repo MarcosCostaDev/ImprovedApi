@@ -93,7 +93,7 @@ namespace ImprovedApi.Api
         {
             if(AssembliesMidiatR.Any())
             {
-                services.AddMediatR(AssembliesMidiatR.Select(p => AppDomain.CurrentDomain.Load(p)));
+                services.AddMediatR(AssembliesMidiatR.Select(p => AppDomain.CurrentDomain.Load(p)).ToArray());
             }
             else
             {
