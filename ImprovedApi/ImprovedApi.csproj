@@ -5,12 +5,15 @@
     <Product>ImprovedApi</Product>
     <Description>Improved api to start any api project.</Description>
     <PackageId>ImprovedApi</PackageId>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>new configuration, authenticate, support CRUD commands</PackageReleaseNotes>
-    <Version>2.0.4</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageReleaseNotes>update project to dotnet core 2.2.0</PackageReleaseNotes>
+    <Version>2.2.0</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>ImprovedApi</Company>
     <Authors>ImprovedApi</Authors>
+    <PackageProjectUrl>https://github.com/marcoslcosta/ImprovedApi</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/marcoslcosta/ImprovedApi</RepositoryUrl>
+    <PackageTags>dotnetcore; aspnet; C#; api; improvedAPI;</PackageTags>
   </PropertyGroup>
 
 
