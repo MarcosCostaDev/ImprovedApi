@@ -43,16 +43,25 @@ namespace ImprovedApi.Api.Midlewares
             if (exception is EntityException)
             {
                 code = HttpStatusCode.BadRequest;
-                result = JsonConvert.SerializeObject(new ResponseResult(null, (exception as EntityException).Notifications));
+                result = JsonConvert.SerializeObject(new ResponseResult(null, (exception as EntityException).Notifications), new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
             }
             else if (exception is UnauthorizedException)
             {
                 code = HttpStatusCode.Unauthorized;
-                result = JsonConvert.SerializeObject(new ResponseResult(null, (exception as UnauthorizedException).Notifications));
+                result = JsonConvert.SerializeObject(new ResponseResult(null, (exception as UnauthorizedException).Notifications), new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
             }
             else
             {
-                result = JsonConvert.SerializeObject(new { error = exception.Message });
+                result = JsonConvert.SerializeObject(new { error = exception.Message }, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
 
 #if DEBUG
                 ImprovedLogger.Write(exception);

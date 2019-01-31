@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace ImprovedApi.Infra.Loggers
 {
@@ -11,9 +7,15 @@ namespace ImprovedApi.Infra.Loggers
     internal static class ApplicationLogging
     {
         internal static ILoggerFactory LoggerFactory { get; set; }
-        internal static ILogger CreateLogger<T>() => LoggerFactory.CreateLogger<T>();
-        internal static ILogger CreateLogger(string categoryName) => LoggerFactory.CreateLogger(categoryName);
+        internal static ILogger CreateLogger<T>()
+        {
+            return LoggerFactory.CreateLogger<T>();
+        }
 
+        internal static ILogger CreateLogger(string categoryName)
+        {
+            return LoggerFactory.CreateLogger(categoryName);
+        }
     }
 
     public static class ImprovedLogger
@@ -30,7 +32,10 @@ namespace ImprovedApi.Infra.Loggers
         public static void Write(object error, string title = "ERROR")
         {
             log.LogWarning($"------------------------- {title} BEGIN -------------------------------");
-            log.LogWarning(JsonConvert.SerializeObject(error));
+            log.LogWarning(JsonConvert.SerializeObject(error, Formatting.None, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
             log.LogWarning($"------------------------- {title} END -------------------------------");
         }
     }
