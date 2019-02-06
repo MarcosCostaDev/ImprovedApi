@@ -40,14 +40,7 @@ namespace ImprovedApi.Api.Controllers
         [NonAction]
         protected virtual object CreateToken(ResponseResult result, IOptions<TokenConfiguration> options, SigningConfigurations signingConfigurations)
         {
-            ClaimsIdentity identity = new ClaimsIdentity(
-                   new GenericIdentity(SetIndentify(result), "Login"),
-                   new[] {
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, result.Object.ToString()),
-                        new Claim("UserName", SetUserName(result))
-                   }
-               );
+            ClaimsIdentity identity = CreateClaimIdentity(result);
 
             DateTime Created = DateTime.Now;
             DateTime Expire = Created +
@@ -73,6 +66,18 @@ namespace ImprovedApi.Api.Controllers
             };
         }
 
+        [NonAction]
+        protected virtual ClaimsIdentity CreateClaimIdentity(ResponseResult result)
+        {
+            return new ClaimsIdentity(
+                   new GenericIdentity(SetIndentify(result), "Login"),
+                   new[] {
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
+                        new Claim(JwtRegisteredClaimNames.UniqueName, result.Object.ToString()),
+                        new Claim("UserName", SetUserName(result))
+                   }
+               );
+        }
 
         [NonAction]
         protected virtual string SetIndentify(ResponseResult result)
