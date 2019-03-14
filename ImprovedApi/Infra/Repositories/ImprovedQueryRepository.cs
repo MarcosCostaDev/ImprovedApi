@@ -15,29 +15,33 @@ namespace ImprovedApi.Infra.Repositories
     {
 
         protected readonly TDbContext _dbContext;
-        public ImprovedQueryRepository(TDbContext dbContext)
+        protected bool _useDbQuery { get; set; } = false;
+
+        public ImprovedQueryRepository(TDbContext dbContext, bool useDbQuery = false)
         {
             _dbContext = dbContext;
+            _useDbQuery = useDbQuery;
         }
 
+   
         public virtual TEntity GetById(int id)
         {
-            return _dbContext.Set<TEntity>().Find(id);
+            return _useDbQuery ? _dbContext.Query<TEntity>().FirstOrDefault() : _dbContext.Set<TEntity>().Find(id);
         }
 
         public virtual TEntity GetById(long id)
         {
-            return _dbContext.Set<TEntity>().Find(id);
+            return _useDbQuery ? _dbContext.Query<TEntity>().FirstOrDefault() : _dbContext.Set<TEntity>().Find(id);
         }
 
         public virtual TEntity GetById(short id)
         {
-            return _dbContext.Set<TEntity>().Find(id);
+            return _useDbQuery ? _dbContext.Query<TEntity>().FirstOrDefault() : _dbContext.Set<TEntity>().Find(id);
         }
 
         public virtual TEntity GetById(string id)
         {
-            return _dbContext.Set<TEntity>().Find(id);
+            return _useDbQuery ? _dbContext.Query<TEntity>().FirstOrDefault() : _dbContext.Set<TEntity>().Find(id);
         }
 
         public virtual ImprovedDbContext GetContext()
@@ -47,17 +51,17 @@ namespace ImprovedApi.Infra.Repositories
 
         public virtual IEnumerable<TEntity> List()
         {
-            return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+            return _useDbQuery ? _dbContext.Query<TEntity>().AsNoTracking().ToList() : _dbContext.Set<TEntity>().AsNoTracking().ToList();
         }
 
         public IEnumerable<TEntity> ListPaged(int page, int pageSize)
         {
-            return _dbContext.Set<TEntity>().AsQueryable().GetPaged(page, pageSize).Results;
+            return _useDbQuery ? _dbContext.Query<TEntity>().AsNoTracking().GetPaged(page, pageSize).Results : _dbContext.Set<TEntity>().AsQueryable().GetPaged(page, pageSize).Results;
         }
 
         public virtual IEnumerable<TEntity> ListTracked()
         {
-            return _dbContext.Set<TEntity>().ToList();
+            return _useDbQuery ? _dbContext.Query<TEntity>().ToList() : _dbContext.Set<TEntity>().ToList();
         }
 
     }
@@ -72,7 +76,7 @@ namespace ImprovedApi.Infra.Repositories
         }
         IEnumerable<TViewModel> IImprovedQueryRepository<TEntity, TViewModel>.ListViewModel()
         {
-            return _dbContext.Set<TEntity>().AsNoTracking().ProjectTo<TViewModel>().ToList();
+            return _useDbQuery ? _dbContext.Query<TEntity>().AsNoTracking().ProjectTo<TViewModel>().ToList() : _dbContext.Set<TEntity>().AsNoTracking().ProjectTo<TViewModel>().ToList();
         }
 
     }
