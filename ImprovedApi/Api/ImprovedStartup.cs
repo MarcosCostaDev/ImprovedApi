@@ -209,15 +209,12 @@ namespace ImprovedApi.Api
                     c.CustomSchemaIds(x => x.FullName);
                     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
-                    if(AuthenticationEnabled)
+                    if (AuthenticationEnabled)
                     {
-                        c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                        {
-                            Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                            Name = "Authorization",
-                            In = "header",
-                            Type = "apiKey"
-                        });
+                        c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+                        c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                { "Bearer", Enumerable.Empty<string>() },
+            });
                     }
                 }
                 catch (Exception ex)

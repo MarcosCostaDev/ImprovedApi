@@ -65,7 +65,7 @@ namespace Example.Domain.Commands
                 contract.IsNotNull(artist, "user", "user not authenticated");
                 AddNotifications(contract);
                 */
-                AddNotification("test", "any");
+                //AddNotification("test", "any");
                 var artist = new Artist(request.Name);
                 return new ResponseResult(artist, this);
             }
