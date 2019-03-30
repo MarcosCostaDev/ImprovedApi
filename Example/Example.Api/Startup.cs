@@ -21,6 +21,7 @@ namespace Example.Api
         public Startup(IConfiguration configuration, ILogger<Startup> logger, ILoggerFactory logFactory, IHostingEnvironment hostingEnvironment) : base(configuration, logger, logFactory, hostingEnvironment)
         {
             AssembliesMidiatR.Add("Example.Domain");
+            AuthenticationEnabled = true;
 
 #if !DEBUG
             SwaggerEnabled = false;

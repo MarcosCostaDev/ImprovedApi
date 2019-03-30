@@ -60,9 +60,12 @@ namespace Example.Domain.Commands
             public async Task<ResponseResult> Handle(AuthCommand request, CancellationToken cancellationToken)
             {
                 var contract = new Contract();
+                /*
                 var artist = _repository.GetByName(request.Name);
                 contract.IsNotNull(artist, "user", "user not authenticated");
                 AddNotifications(contract);
+                */
+                var artist = new Artist(request.Name);
                 return new ResponseResult(artist, this);
             }
 

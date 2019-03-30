@@ -20,5 +20,7 @@ namespace ImprovedApi.Api.Exceptions
         public EntityException(IEnumerable<Notification> notifications) : base(notifications)
         {
         }
+
+        
     }
 }

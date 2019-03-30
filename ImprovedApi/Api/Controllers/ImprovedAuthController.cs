@@ -33,8 +33,16 @@ namespace ImprovedApi.Api.Controllers
             [FromServices] SigningConfigurations signingConfigurations)
         {
             var result = await _mediator.Send(request);
-            var token = CreateToken(result, options, signingConfigurations);
-            return Ok(token, result.Notifications);
+            if(result.Valid)
+            {
+                var token = CreateToken(result, options, signingConfigurations);
+                return Ok(token, result.Notifications);
+            }
+            else
+            {
+                return Unauthorized(result);
+            }
+            
         }
     
         [NonAction]

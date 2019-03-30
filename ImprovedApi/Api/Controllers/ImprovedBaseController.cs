@@ -75,5 +75,63 @@ namespace ImprovedApi.Api.Controllers
             return base.Ok(result);
         }
 
+        [NonAction]
+        public OkObjectResult Unauthorized(string message)
+        {
+            throw new UnauthorizedException(message);
+        }
+
+        [NonAction]
+        public OkObjectResult Unauthorized(object value)
+        {
+
+            if (value is ImprovedEntity)
+            {
+                var convert = value as ImprovedEntity;              
+                if (convert.Invalid) throw new UnauthorizedException(convert.Notifications);
+            }
+            else if (value is Notifiable)
+            {
+                var notifiable = value as Notifiable;
+                var mensage = string.Join(";", notifiable.Notifications.Select(p => p.Message));
+                if (notifiable.Invalid) throw new UnauthorizedException(mensage);
+            }
+
+            _unitOfWork.Commit();
+
+            var result = new ResponseResult(value);
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($@"Result: ${JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            })}", "Information");
+#endif
+
+            return base.Ok(result);
+
+        }
+
+        [NonAction]
+        public OkObjectResult Unauthorized(object value, IEnumerable<Notification> notifications)
+        {
+            if (notifications.Any())
+            {
+                throw new UnauthorizedException(notifications);
+            }
+            _unitOfWork.Commit();
+
+            var result = new ResponseResult(value, notifications);
+
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine($@"Result: ${JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            })}", "Information");
+#endif
+
+            return base.Ok(result);
+        }
+
     }
 }

@@ -4,13 +4,18 @@ using ImprovedApi.Api.Security.Token;
 using ImprovedApi.Infra.Loggers;
 using ImprovedApi.Infra.Transactions;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
@@ -26,6 +31,8 @@ namespace ImprovedApi.Api
     {
 
         protected bool SwaggerEnabled { get; set; } = true;
+        protected bool AuthenticationEnabled { get; set; } = false;
+
         protected readonly IConfiguration Configuration;
         protected List<string> AssembliesMidiatR { get; private set; } = new List<string>();
         protected List<Profile> AutoMapperProfiles { get; private set; } = new List<Profile>();
@@ -51,14 +58,15 @@ namespace ImprovedApi.Api
                 services.AddOptions();
                 services.Configure<TokenConfiguration>(options => Configuration.GetSection("TokenConfiguration").Bind(options));
                 services.AddSingleton<SigningConfigurations, SigningConfigurations>();
+
+                AddAuthentication(services);
+                AddAuthorization(services);
             }
             else
             {
                 ImprovedLogger.Write(@"if you wish use token/authentication, please add 'TokenConfiguration' Section in your appsettings.json with properties as follows:
                                       'SecretKey', 'Audience', 'Issuer', 'Seconds'");
             }
-           
-
 
             services.AddSingleton<IImprovedUnitOfWork, ImprovedUnitOfWork>()
                 .AddSingleton(Configuration);
@@ -71,7 +79,58 @@ namespace ImprovedApi.Api
             {
                 AddSwagger(services);
             }
+
+            if(AuthenticationEnabled && Configuration.GetSection("TokenConfiguration") != null)
+            {
+                services.AddMvc(config =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
+                        .RequireAuthenticatedUser().Build();
+
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                });
+            }
+            else
+            {
+                services.AddMvc();
+            }
+
+            
            
+        }
+
+        public virtual void AddAuthentication(IServiceCollection services)
+        {
+           
+            var sp = services.BuildServiceProvider();
+            var signingConfigurations = sp.GetService<SigningConfigurations>();
+            var tokenConfigurations = sp.GetService<IOptions<TokenConfiguration>>();
+
+            services.AddAuthentication(authOptions =>
+            {
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.SigningCredentials.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Value.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Value.Issuer;
+                paramsValidation.ValidateIssuerSigningKey = true;
+                paramsValidation.ValidateLifetime = true;
+                paramsValidation.ClockSkew = TimeSpan.Zero;
+            });
+        }
+
+        public virtual void AddAuthorization(IServiceCollection services)
+        {
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
+                    .RequireAuthenticatedUser().Build());
+            });
         }
 
 
