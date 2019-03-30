@@ -7,7 +7,7 @@
     <PackageId>ImprovedApi</PackageId>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReleaseNotes>fixing json looping reference</PackageReleaseNotes>
-    <Version>2.2.6</Version>
+    <Version>2.2.7</Version>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>ImprovedApi</Company>
     <Authors>ImprovedApi</Authors>
