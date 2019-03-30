@@ -93,8 +93,7 @@ namespace ImprovedApi.Api.Controllers
             else if (value is Notifiable)
             {
                 var notifiable = value as Notifiable;
-                var mensage = string.Join(";", notifiable.Notifications.Select(p => p.Message));
-                if (notifiable.Invalid) throw new UnauthorizedException(mensage);
+                if (notifiable.Invalid) throw new UnauthorizedException(notifiable.Notifications);
             }
 
             _unitOfWork.Commit();

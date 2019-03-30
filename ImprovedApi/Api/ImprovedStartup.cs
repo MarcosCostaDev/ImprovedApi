@@ -38,6 +38,7 @@ namespace ImprovedApi.Api
         protected List<Profile> AutoMapperProfiles { get; private set; } = new List<Profile>();
         protected readonly IHostingEnvironment HostingEnvironment;
         protected readonly ILogger<ImprovedStartup> Logger;
+        protected IMvcBuilder _mvcBuilder;
 
         public ImprovedStartup(IConfiguration configuration, ILogger<ImprovedStartup> logger, ILoggerFactory logFactory, IHostingEnvironment hostingEnvironment)
         {
@@ -47,13 +48,13 @@ namespace ImprovedApi.Api
             HostingEnvironment = hostingEnvironment;
             ApplicationLogging.LoggerFactory = logFactory;
         }
-        
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
-        { 
+        {
 
-            if (Configuration.GetSection("TokenConfiguration") != null)
+            if (AuthenticationEnabled && Configuration.GetSection("TokenConfiguration") != null)
             {
                 services.AddOptions();
                 services.Configure<TokenConfiguration>(options => Configuration.GetSection("TokenConfiguration").Bind(options));
@@ -75,14 +76,14 @@ namespace ImprovedApi.Api
             AddMediatR(services);
             AddAutoMapper(services);
 
-            if(SwaggerEnabled)
+            if (SwaggerEnabled)
             {
                 AddSwagger(services);
             }
 
-            if(AuthenticationEnabled && Configuration.GetSection("TokenConfiguration") != null)
+            if (AuthenticationEnabled && Configuration.GetSection("TokenConfiguration") != null)
             {
-                services.AddMvc(config =>
+                _mvcBuilder = services.AddMvc(config =>
                 {
                     var policy = new AuthorizationPolicyBuilder()
                         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
@@ -93,16 +94,26 @@ namespace ImprovedApi.Api
             }
             else
             {
-                services.AddMvc();
+                _mvcBuilder = services.AddMvc();
             }
 
-            
-           
+            MvcJsonOptions(_mvcBuilder);
         }
+
+        public virtual void MvcJsonOptions(IMvcBuilder mvcBuilder)
+        {
+            _mvcBuilder
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+        }
+
 
         public virtual void AddAuthentication(IServiceCollection services)
         {
-           
+
             var sp = services.BuildServiceProvider();
             var signingConfigurations = sp.GetService<SigningConfigurations>();
             var tokenConfigurations = sp.GetService<IOptions<TokenConfiguration>>();
@@ -141,16 +152,16 @@ namespace ImprovedApi.Api
             {
                 UseSwagger(app);
             }
-                
+
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
-            
+
             app.UseMvc();
         }
-               
+
         #region MediatR
         protected virtual void AddMediatR(IServiceCollection services)
         {
-            if(AssembliesMidiatR.Any())
+            if (AssembliesMidiatR.Any())
             {
                 services.AddMediatR(AssembliesMidiatR.Select(p => AppDomain.CurrentDomain.Load(p)).ToArray());
             }
@@ -159,24 +170,24 @@ namespace ImprovedApi.Api
                 ImprovedLogger.Write("Please, inform the 'AssembliesMidiatR' inside contructor Startup class!");
             }
 
-           
+
         }
         #endregion
 
         #region AutoMapper
         protected virtual void AddAutoMapper(IServiceCollection services)
         {
-            if(AutoMapperProfiles.Any())
+            if (AutoMapperProfiles.Any())
             {
                 Mapper.Initialize(cfg =>
                 {
-                    AutoMapperProfiles.ForEach(p => cfg.AddProfile(p));                   
+                    AutoMapperProfiles.ForEach(p => cfg.AddProfile(p));
                 });
             }
-           
+
         }
         #endregion
-        
+
         #region Swagger
         protected virtual void AddSwagger(IServiceCollection services)
         {
@@ -197,6 +208,17 @@ namespace ImprovedApi.Api
                     c.IncludeXmlComments(xmlPath);
                     c.CustomSchemaIds(x => x.FullName);
                     c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
+                    if(AuthenticationEnabled)
+                    {
+                        c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                        {
+                            Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                            Name = "Authorization",
+                            In = "header",
+                            Type = "apiKey"
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {

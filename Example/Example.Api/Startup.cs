@@ -32,14 +32,7 @@ namespace Example.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-              .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-              .AddJsonOptions(options =>
-              {
-                  options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                  options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-              });
-
+           
             services.AddCors();
 
 
