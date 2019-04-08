@@ -12,9 +12,9 @@ namespace ImprovedApi.Infra.Contexts
     public abstract class ImprovedDbContext : DbContext
     {
 
-        public bool IsDead { get; private set; } = false;
-        protected IConfigurationRoot _configurationRoot { get; private set; }
-        protected IHostingEnvironment _env { get; private set; }
+        public bool IsDead { get; set; } = false;
+        protected IConfigurationRoot _configurationRoot { get; set; }
+        protected IHostingEnvironment _env { get; set; }
         public ImprovedDbContext(IHostingEnvironment env)
         {
             _env = env;
