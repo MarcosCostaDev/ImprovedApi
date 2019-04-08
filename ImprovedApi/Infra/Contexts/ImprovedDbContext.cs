@@ -14,7 +14,14 @@ namespace ImprovedApi.Infra.Contexts
 
         public bool IsDead { get; private set; } = false;
         protected IConfigurationRoot _configurationRoot { get; private set; }
+        protected IHostingEnvironment _env { get; private set; }
         public ImprovedDbContext(IHostingEnvironment env)
+        {
+            _env = env;
+            SetConfigurationRoot();
+        }
+
+        protected virtual void SetConfigurationRoot()
         {
             string pathToContentRoot = Directory.GetCurrentDirectory();
             string json = Path.Combine(pathToContentRoot, "appsettings.json");
@@ -28,7 +35,7 @@ namespace ImprovedApi.Infra.Contexts
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(pathToContentRoot)
                 .AddJsonFile($"appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
+                .AddJsonFile($"appsettings.{_env.EnvironmentName}.json", true);
 
             _configurationRoot = configurationBuilder.Build();
         }
