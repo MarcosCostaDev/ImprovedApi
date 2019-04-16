@@ -13,33 +13,14 @@ namespace ImprovedApi.Infra.Contexts
     {
 
         public bool IsDead { get; set; } = false;
-        protected IConfigurationRoot _configurationRoot { get; set; }
+        protected IConfiguration _configurationRoot { get; set; }
         protected IHostingEnvironment _env { get; set; }
-        public ImprovedDbContext(IHostingEnvironment env)
+        public ImprovedDbContext(IHostingEnvironment env, IConfiguration Configuration)
         {
             _env = env;
-            SetConfigurationRoot();
+            _configurationRoot = Configuration;
         }
-
-        protected virtual void SetConfigurationRoot()
-        {
-            string pathToContentRoot = Directory.GetCurrentDirectory();
-            string json = Path.Combine(pathToContentRoot, "appsettings.json");
-
-            if (!File.Exists(json))
-            {
-                string pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                pathToContentRoot = Path.GetDirectoryName(pathToExe);
-            }
-
-            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(pathToContentRoot)
-                .AddJsonFile($"appsettings.json")
-                .AddJsonFile($"appsettings.{_env.EnvironmentName}.json", true);
-
-            _configurationRoot = configurationBuilder.Build();
-        }
-
+       
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var loggerFactory = new LoggerFactory();
