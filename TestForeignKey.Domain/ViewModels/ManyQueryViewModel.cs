@@ -19,5 +19,8 @@ namespace TestForeignKey.Domain.ViewModels
         public string ManyProperty02 { get; set; }
         public string ManyProperty03 { get; set; }
         public string ManyProperty04 { get; set; }
+
+        public int QuantitySelfElement { get; set; }
+
     }
 }
