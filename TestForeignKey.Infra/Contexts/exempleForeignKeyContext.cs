@@ -14,6 +14,8 @@ namespace TestForeignKey.Infra.Contexts
     {
         public DbSet<One> One { get; set; }
         public DbSet<Many> Many { get; set; }
+        public DbSet<ToOne> ToOne { get; set; }
+        public DbSet<SelfOne> SelfOne { get; set; }
         public ExempleForeignKeyContext(IHostingEnvironment env, IConfiguration Configuration) : base(env, Configuration)
         {
         }
@@ -28,7 +30,9 @@ namespace TestForeignKey.Infra.Contexts
         {
             modelBuilder
                 .ApplyConfiguration(new OneMapping())
-                .ApplyConfiguration(new ManyMapping());
+                .ApplyConfiguration(new ManyMapping())
+                .ApplyConfiguration(new ToOneMapping())
+                .ApplyConfiguration(new SelfOneMapping());
 
             base.OnModelCreating(modelBuilder);
         }

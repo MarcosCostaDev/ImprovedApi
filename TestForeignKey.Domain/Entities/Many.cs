@@ -22,6 +22,8 @@ namespace TestForeignKey.Domain.Entities
         public string ManyProperty04 { get; private set; }
 
         public One One { get; private set; }
+        public ToOne ToOne { get; private set; }
+        public IEnumerable<SelfOne> SelfOne { get; private set; }
 
 
     }

@@ -37,6 +37,21 @@ namespace TestForeignKey.Domain.Commands
                 
                 AddNotifications(many);
                 _repository.Add(many);
+
+                var toOneResponse = await _mediator.Send(new ToOneHandlers.CreateCommand
+                {
+                    Many = many,
+                    Property01 = request.ManyProperty01
+                });
+
+                var selfOneResponse = await _mediator.Send(new SelfOneHandlers.CreateCommand
+                {
+                    Many = many,
+                    Property01 = request.ManyProperty01
+                });
+                AddNotifications(selfOneResponse);
+                AddNotifications(toOneResponse);
+
                 return new ResponseResult(many, this);
             }
         }

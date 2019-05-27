@@ -30,12 +30,12 @@ namespace TestForeignKey
         {
 
             services.AddCors();
-
-
             services
                 .AddScoped<ExempleForeignKeyContext, ExempleForeignKeyContext>()
                 .AddTransient<IOneRepository, OneRepository>()
-                .AddTransient<IManyRepository, ManyRepository>();
+                .AddTransient<IManyRepository, ManyRepository>()
+                .AddTransient<IToOneRepository, ToOneRepository>()
+                .AddTransient<ISelfOneRepository, SelfOneRepository>();
 
             base.ConfigureServices(services);
         }
