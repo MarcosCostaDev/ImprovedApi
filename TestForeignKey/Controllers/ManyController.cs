@@ -20,5 +20,12 @@ namespace TestForeignKey.Controllers
         public ManyController(IMediator mediator, IImprovedUnitOfWork unitOfWork, IManyRepository repository) : base(mediator, unitOfWork, repository)
         {
         }
+
+        [HttpGet]
+        [Route("v1/ListCustomMany")]
+        public OkObjectResult ListCustomMany()
+        {
+            return Ok(_repository.ListCustomMany());
+        }
     }
 }
