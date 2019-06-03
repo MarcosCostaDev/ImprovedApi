@@ -11,7 +11,7 @@ you will work with follows:
 This package is available through Nuget Packages: https://www.nuget.org/packages/ImprovedApi
 
 ## Dependency
-- dotnetcore 2.1
+- dotnetcore 2.2
 
 ### Nuget Package Manager
 `PM > Install-Package ImprovedApi`
