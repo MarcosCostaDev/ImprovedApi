@@ -12,7 +12,7 @@ namespace ImprovedApi.Infra.Transactions
     public class ImprovedUnitOfWork : IImprovedUnitOfWork, IDisposable
     {
         public bool IsDeal { get; private set; } = false;
-        private IList<ImprovedDbContext> contexts = new List<ImprovedDbContext>();
+        private IList<ImprovedDbFirstContext> contexts = new List<ImprovedDbFirstContext>();
         private Dictionary<string, IDbContextTransaction> dbContextTransations = new Dictionary<string, IDbContextTransaction>();
 
         public void Begin(IImprovedRepository repository)
@@ -20,7 +20,7 @@ namespace ImprovedApi.Infra.Transactions
             Begin(repository.GetContext());
         }
 
-        public void Begin(ImprovedDbContext baseDbContext)
+        public void Begin(ImprovedDbFirstContext baseDbContext)
         {
             if (!contexts.Any(p => p.GetType().FullName == baseDbContext.GetType().FullName))
             {
@@ -102,7 +102,7 @@ namespace ImprovedApi.Infra.Transactions
 
     public interface IImprovedUnitOfWork
     {
-        void Begin(ImprovedDbContext baseDbContext);
+        void Begin(ImprovedDbFirstContext baseDbContext);
         void Begin(IImprovedRepository repository);
         void Commit();
         void Rollback();

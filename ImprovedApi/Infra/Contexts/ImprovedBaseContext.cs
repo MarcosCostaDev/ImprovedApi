@@ -4,23 +4,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ImprovedApi.Infra.Contexts
 {
-    public abstract class ImprovedDbContext : DbContext
+    public abstract class ImprovedBaseContext : DbContext
     {
-
         public bool IsDead { get; set; } = false;
         protected IConfiguration _configurationRoot { get; set; }
         protected IHostingEnvironment _env { get; set; }
-        public ImprovedDbContext(IHostingEnvironment env, IConfiguration Configuration)
-        {
-            _env = env;
-            _configurationRoot = Configuration;
-        }
        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var loggerFactory = new LoggerFactory();
@@ -34,7 +30,7 @@ namespace ImprovedApi.Infra.Contexts
             modelBuilder
                 .Ignore<Notifiable>()
                 .Ignore<Notification>();
-             
+
 
             base.OnModelCreating(modelBuilder);
         }

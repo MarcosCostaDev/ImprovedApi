@@ -3,18 +3,19 @@ using Example.Infra.Mapping;
 using ImprovedApi.Infra.Contexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Example.Infra.Context
 {
-    public class ExampleContext : ImprovedDbContext
+    public class ExampleContext : ImprovedDbFirstContext
     {
         public DbSet<Album> Album { get; set; }
         public DbSet<Artist> Artist { get; set; }
 
-        public ExampleContext(IHostingEnvironment env) : base(env)
+        public ExampleContext(IHostingEnvironment env, IConfigurationRoot configutationRoot) : base(env, configutationRoot)
         {
         }
 
