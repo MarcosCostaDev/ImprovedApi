@@ -13,7 +13,7 @@ namespace ImprovedApi.Infra.Repositories
 {
     public abstract class ImprovedRecordRepository<TEntity, TDbContext> : ImprovedQueryRepository<TEntity, TDbContext>, IImprovedRecordRepository<TEntity>
         where TEntity : Domain.Entities.ImprovedEntity
-        where TDbContext : ImprovedDbFirstContext
+        where TDbContext : ImprovedBaseContext
     {
         public ImprovedRecordRepository(TDbContext dbContext) : base(dbContext)
         {

@@ -10,13 +10,13 @@ using TestCodeFirst.Infra.Mappings;
 
 namespace TestCodeFirst.Infra.Contexts
 {
-    public class ExempleForeignKeyContext : ImprovedDbContext
+    public class ExempleForeignKeyContext : ImprovedCodeFirstContext
     {
         public DbSet<One> One { get; set; }
         public DbSet<Many> Many { get; set; }
         public DbSet<ToOne> ToOne { get; set; }
         public DbSet<SelfOne> SelfOne { get; set; }
-        public ExempleForeignKeyContext(IHostingEnvironment env, IConfiguration Configuration) : base(env, Configuration)
+        public ExempleForeignKeyContext(IHostingEnvironment env) : base(env)
         {
         }
 

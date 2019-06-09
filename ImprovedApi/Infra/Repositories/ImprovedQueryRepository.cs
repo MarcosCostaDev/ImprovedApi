@@ -11,7 +11,7 @@ namespace ImprovedApi.Infra.Repositories
 {
     public abstract class ImprovedQueryRepository<TEntity, TDbContext> : IImprovedQueryRepository<TEntity>
         where TEntity : Domain.Entities.ImprovedEntity
-        where TDbContext : ImprovedDbFirstContext
+        where TDbContext : ImprovedBaseContext
     {
 
         protected readonly TDbContext _dbContext;
@@ -44,7 +44,7 @@ namespace ImprovedApi.Infra.Repositories
             return _useDbQuery ? _dbContext.Query<TEntity>().FirstOrDefault() : _dbContext.Set<TEntity>().Find(id);
         }
 
-        public virtual ImprovedDbFirstContext GetContext()
+        public virtual ImprovedBaseContext GetContext()
         {
             return _dbContext;
         }
@@ -69,7 +69,7 @@ namespace ImprovedApi.Infra.Repositories
     public abstract class ImprovedQueryRepository<TEntity, TDbContext, TViewModel> : ImprovedQueryRepository<TEntity, TDbContext>, IImprovedQueryRepository<TEntity, TViewModel>
         where TEntity : Domain.Entities.ImprovedEntity
         where TViewModel : ImprovedQueryViewModel
-        where TDbContext : ImprovedDbFirstContext
+        where TDbContext : ImprovedBaseContext
     {
         public ImprovedQueryRepository(TDbContext dbContext) : base(dbContext)
         {

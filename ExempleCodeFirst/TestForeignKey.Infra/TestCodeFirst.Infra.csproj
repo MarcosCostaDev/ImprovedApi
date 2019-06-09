@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ImprovedApi" Version="2.2.11" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\ImprovedApi\ImprovedApi.csproj" />
     <ProjectReference Include="..\TestForeignKey.Domain\TestCodeFirst.Domain.csproj" />
   </ItemGroup>
 
